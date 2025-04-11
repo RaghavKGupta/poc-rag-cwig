@@ -69,12 +69,6 @@ const PurePreviewMessage = ({
                 data-testid={`message-attachments`}
                 className="flex flex-row justify-end gap-2"
               >
-                {message.experimental_attachments.map((attachment) => (
-                  <PreviewAttachment
-                    key={attachment.url}
-                    attachment={attachment}
-                  />
-                ))}
               </div>
             )}
 
@@ -126,90 +120,8 @@ const PurePreviewMessage = ({
                     </div>
                   );
                 }
-
-                if (mode === 'edit') {
-                  return (
-                    <div key={key} className="flex flex-row gap-2 items-start">
-                      <div className="size-8" />
-
-                      <MessageEditor
-                        key={message.id}
-                        message={message}
-                        setMode={setMode}
-                        setMessages={setMessages}
-                        reload={reload}
-                      />
-                    </div>
-                  );
-                }
               }
 
-              if (type === 'tool-invocation') {
-                const { toolInvocation } = part;
-                const { toolName, toolCallId, state } = toolInvocation;
-
-                if (state === 'call') {
-                  const { args } = toolInvocation;
-
-                  return (
-                    <div
-                      key={toolCallId}
-                      className={cx({
-                        skeleton: ['getWeather'].includes(toolName),
-                      })}
-                    >
-                      {toolName === 'getWeather' ? (
-                        <Weather />
-                      ) : toolName === 'createDocument' ? (
-                        <DocumentPreview isReadonly={isReadonly} args={args} />
-                      ) : toolName === 'updateDocument' ? (
-                        <DocumentToolCall
-                          type="update"
-                          args={args}
-                          isReadonly={isReadonly}
-                        />
-                      ) : toolName === 'requestSuggestions' ? (
-                        <DocumentToolCall
-                          type="request-suggestions"
-                          args={args}
-                          isReadonly={isReadonly}
-                        />
-                      ) : null}
-                    </div>
-                  );
-                }
-
-                if (state === 'result') {
-                  const { result } = toolInvocation;
-
-                  return (
-                    <div key={toolCallId}>
-                      {toolName === 'getWeather' ? (
-                        <Weather weatherAtLocation={result} />
-                      ) : toolName === 'createDocument' ? (
-                        <DocumentPreview
-                          isReadonly={isReadonly}
-                          result={result}
-                        />
-                      ) : toolName === 'updateDocument' ? (
-                        <DocumentToolResult
-                          type="update"
-                          result={result}
-                          isReadonly={isReadonly}
-                        />
-                      ) : toolName === 'requestSuggestions' ? (
-                        <DocumentToolResult
-                          type="request-suggestions"
-                          result={result}
-                          isReadonly={isReadonly}
-                        />
-                      ) : (
-                        <pre>{JSON.stringify(result, null, 2)}</pre>
-                      )}
-                    </div>
-                  );
-                }
-              }
             })}
 
             {!isReadonly && (
