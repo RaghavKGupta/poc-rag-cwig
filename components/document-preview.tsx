@@ -16,7 +16,6 @@ import { InlineDocumentSkeleton } from './document-skeleton';
 import useSWR from 'swr';
 import { Editor } from './text-editor';
 import { DocumentToolCall, DocumentToolResult } from './document';
-import { CodeEditor } from './code-editor';
 import { useArtifact } from '@/hooks/use-artifact';
 import equal from 'fast-deep-equal';
 import { SpreadsheetEditor } from './sheet-editor';
@@ -106,11 +105,7 @@ export function DocumentPreview({
         result={result}
         setArtifact={setArtifact}
       />
-      <DocumentHeader
-        title={document.title}
-        kind={document.kind}
-        isStreaming={artifact.status === 'streaming'}
-      />
+
       <DocumentContent document={document} />
     </div>
   );
@@ -129,15 +124,7 @@ const LoadingSkeleton = ({ artifactKind }: { artifactKind: ArtifactKind }) => (
         <FullscreenIcon />
       </div>
     </div>
-    {artifactKind === 'image' ? (
-      <div className="overflow-y-scroll border rounded-b-2xl bg-muted border-t-0 dark:border-zinc-700">
-        <div className="animate-pulse h-[257px] bg-muted-foreground/20 w-full" />
-      </div>
-    ) : (
-      <div className="overflow-y-scroll border rounded-b-2xl p-8 pt-4 bg-muted border-t-0 dark:border-zinc-700">
-        <InlineDocumentSkeleton />
-      </div>
-    )}
+
   </div>
 );
 
@@ -215,9 +202,7 @@ const PureDocumentHeader = ({
           <div className="animate-spin">
             <LoaderIcon />
           </div>
-        ) : kind === 'image' ? (
-          <ImageIcon />
-        ) : (
+        )  : (
           <FileIcon />
         )}
       </div>
@@ -260,9 +245,6 @@ const DocumentContent = ({ document }: { document: Document }) => {
         <Editor {...commonProps} onSaveContent={() => {}} />
       ) : document.kind === 'code' ? (
         <div className="flex flex-1 relative w-full">
-          <div className="absolute inset-0">
-            <CodeEditor {...commonProps} onSaveContent={() => {}} />
-          </div>
         </div>
       ) : document.kind === 'sheet' ? (
         <div className="flex flex-1 relative size-full p-4">

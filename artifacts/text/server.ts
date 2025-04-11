@@ -11,7 +11,7 @@ export const textDocumentHandler = createDocumentHandler<'text'>({
     const { fullStream } = streamText({
       model: myProvider.languageModel('artifact-model'),
       system:
-        'Write about the given topic. Markdown is supported. Use headings wherever appropriate.',
+        'Write about the given topic only if it pertains to prevention of child abuse, child neglect, anything to do with children. If the topic is something else, answer " I dont know the answer to that ".  Use headings wherever appropriate.',
       experimental_transform: smoothStream({ chunking: 'word' }),
       prompt: title,
     });
