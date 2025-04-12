@@ -16,7 +16,6 @@ import {
   GlobeIcon,
   LockIcon,
 } from './icons';
-import { useChatVisibility } from '@/hooks/use-chat-visibility';
 
 export type VisibilityType = 'private' | 'public';
 
@@ -50,15 +49,6 @@ export function VisibilitySelector({
 } & React.ComponentProps<typeof Button>) {
   const [open, setOpen] = useState(false);
 
-  const { visibilityType, setVisibilityType } = useChatVisibility({
-    chatId,
-    initialVisibility: selectedVisibilityType,
-  });
-
-  const selectedVisibility = useMemo(
-    () => visibilities.find((visibility) => visibility.id === visibilityType),
-    [visibilityType],
-  );
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -73,8 +63,6 @@ export function VisibilitySelector({
           variant="outline"
           className="hidden md:flex md:px-2 md:h-[34px]"
         >
-          {selectedVisibility?.icon}
-          {selectedVisibility?.label}
           <ChevronDownIcon />
         </Button>
       </DropdownMenuTrigger>
@@ -82,13 +70,8 @@ export function VisibilitySelector({
       <DropdownMenuContent align="start" className="min-w-[300px]">
         {visibilities.map((visibility) => (
           <DropdownMenuItem
-            key={visibility.id}
-            onSelect={() => {
-              setVisibilityType(visibility.id);
-              setOpen(false);
-            }}
+            key={visibility.id}         
             className="gap-4 group/item flex flex-row justify-between items-center"
-            data-active={visibility.id === visibilityType}
           >
             <div className="flex flex-col gap-1 items-start">
               {visibility.label}
